@@ -1,12 +1,12 @@
-package ru.students.spring_security.service;
+package ru.students.spring_full.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.students.spring_security.dto.UserDto;
-import ru.students.spring_security.entity.Role;
-import ru.students.spring_security.entity.User;
-import ru.students.spring_security.repository.RoleRepository;
-import ru.students.spring_security.repository.UserRepository;
+import ru.students.spring_full.dto.UserDto;
+import ru.students.spring_full.entity.Role;
+import ru.students.spring_full.entity.User;
+import ru.students.spring_full.repository.RoleRepository;
+import ru.students.spring_full.repository.UserRepository;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.students.spring_security.entity;
+package ru.students.spring_full.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

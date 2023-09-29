@@ -1,4 +1,4 @@
-package ru.students.spring_security.controller;
+package ru.students.spring_full.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -7,8 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.students.spring_security.dto.UserDto;
-import ru.students.spring_security.service.UserService;
+import ru.students.spring_full.dto.UserDto;
+import ru.students.spring_full.service.UserService;
 
 @Controller
 public class SecurityController {
@@ -19,7 +19,7 @@ public class SecurityController {
     }
 
     @GetMapping("/index")
-    public String hone() {
+    public String home() {
         return "index";
     }
 

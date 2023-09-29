@@ -1,4 +1,4 @@
-package ru.students.spring_security.config;
+package ru.students.spring_full.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

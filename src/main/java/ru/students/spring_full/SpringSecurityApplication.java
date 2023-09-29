@@ -1,4 +1,4 @@
-package ru.students.spring_security;
+package ru.students.spring_full;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

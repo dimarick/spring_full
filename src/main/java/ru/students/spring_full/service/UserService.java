@@ -1,7 +1,7 @@
-package ru.students.spring_security.service;
+package ru.students.spring_full.service;
 
 import org.springframework.stereotype.Service;
-import ru.students.spring_security.dto.UserDto;
+import ru.students.spring_full.dto.UserDto;
 
 import java.util.List;
 

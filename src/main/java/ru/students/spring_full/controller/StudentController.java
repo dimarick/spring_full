@@ -1,4 +1,4 @@
-package ru.students.spring_security.controller;
+package ru.students.spring_full.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.students.spring_security.entity.Student;
-import ru.students.spring_security.repository.StudentRepository;
+import ru.students.spring_full.entity.Student;
+import ru.students.spring_full.repository.StudentRepository;
 
 @Slf4j
 @Controller

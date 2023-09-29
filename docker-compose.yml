@@ -1,0 +1,35 @@
+version: '3.7'
+networks:
+    net:
+        name: net
+        driver: bridge
+services:
+    postgres_test:
+        image: "postgres:15.4"
+        environment:
+            POSTGRES_DB: "test_db"
+            POSTGRES_USER: "user"
+            POSTGRES_PASSWORD: "pass"
+            PGDATA: "/var/lib/postgresql/data/pgdata"
+        volumes:
+            -
+                type: tmpfs
+                target: /var/lib/postgresql/data
+        ports:
+            - "5434:5432"
+        networks:
+            - net
+
+    postgres_main:
+        image: "postgres:15.4"
+        environment:
+            POSTGRES_DB: "main_db"
+            POSTGRES_USER: "user"
+            POSTGRES_PASSWORD: "pass"
+            PGDATA: "/var/lib/postgresql/data/pgdata"
+        volumes:
+            - ./test_db:/var/lib/postgresql/data
+        ports:
+            - "5433:5432"
+        networks:
+            - net

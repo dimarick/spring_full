@@ -1,4 +1,4 @@
-package ru.students.spring_security.dto;
+package ru.students.spring_full.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

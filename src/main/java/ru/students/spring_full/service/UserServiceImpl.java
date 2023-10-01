@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         }
 
         var nameParts = user.getName().split(" ");
-        return new UserDto(user.getId(), nameParts[0], nameParts[1], user.getEmail(), user.getPassword());
+        return new UserDto(user.getId(), nameParts[0], nameParts.length > 1 ? nameParts[1] : "", user.getEmail(), user.getPassword());
     }
 
     private Role createAdminRole() {

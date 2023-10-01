@@ -1,4 +1,4 @@
-![Статус сборки проекта](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![Статус сборки проекта](https://github.com/dimarick/spring_full/actions/workflows/maven.yml/badge.svg)
 
 Запуск
 ======

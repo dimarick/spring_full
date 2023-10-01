@@ -22,8 +22,8 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/index", "/register/**").permitAll()
-                        .anyRequest().hasRole("ADMIN")
+                        .requestMatchers("/register/**").permitAll()
+                        .anyRequest().hasRole("USER")
                 ).formLogin(form -> form.loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/users")

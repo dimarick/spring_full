@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user") // create table user не работает, синтаксическая ошибка
+@Table(name = "users") // create table user не работает, синтаксическая ошибка
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

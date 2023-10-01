@@ -1,0 +1,100 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Не забыть купить</title>
+
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+          crossorigin="anonymous" />
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Не забыть купить</h1>
+
+    <div class="row">
+
+        <form th:action="@{/add-shop-items}" class="w-100" method="POST">
+            <input type="text" name="value" class="form-control col-4 mb-4" placeholder="Введите список покупок через запятую или точку"/>
+            <p>
+                <span th:each="item : ${suggestions}">
+                    <span class="search-tag-link" th:text="${item}"></span>
+                </span>
+            </p>
+            <button type="submit" class="btn btn-primary col-2">Добавить</button>
+        </form>
+
+        <form th:action="@{/set-status}" class="w-100" method="POST">
+            <input type="hidden" name="fromStatus" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).IN_CART}}">
+            <input type="hidden" name="toStatus" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).NEW}}">
+            <button type="submit" class="btn btn-primary col-2">Отметить все как завершенные</button>
+        </form>
+
+        <div th:each="message : ${messages}">
+            <div class="alert alert-danger" th:text="${message}"></div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <table class="w-100">
+            <thead><tr class="col-xs-6"><td>Купить</td><td>Уже в корзине</td></tr></thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <form th:action="@{/set-status}" method="POST">
+                            <input type="hidden" name="fromStatus" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).NEW}}">
+                            <input type="hidden" name="toStatus" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).IN_CART}}">
+                            <button type="submit" class="btn btn-primary col-2">Все -></button>
+                        </form>
+
+                        <div th:each="item : ${items}">
+                            <form th:if="${item.new}" th:action="@{/set-status/{id}(id=${item.id})}" method="POST">
+                                <button type="submit" name="status" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).IN_CART}" class="btn btn-primary col-2" th:text="${item.value}"></button>
+                            </form>
+                        </div>
+                    </td>
+                    <td>
+                        <form th:action="@{/set-status}" method="POST">
+                            <input type="hidden" name="fromStatus" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).IN_CART}}">
+                            <input type="hidden" name="toStatus" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).NEW}}">
+                            <button type="submit" class="btn btn-primary col-2"><- Все</button>
+                        </form>
+
+                        <div th:each="item : ${items}">
+                            <form th:if="${item.inCart}" th:action="@{/set-status/{id}(id=${item.id})}" method="POST">
+                                <button type="submit" name="status" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).NEW}" class="btn btn-primary col-2" th:text="${item.value}"></button>
+                            </form>
+                        </div>
+
+                        <form th:action="@{/set-status}" method="POST">
+                            <input type="hidden" name="fromStatus" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).IN_CART}}">
+                            <input type="hidden" name="toStatus" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).NEW}}">
+                            <button type="submit" class="btn btn-primary col-2">Отметить все как завершенные</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        <div th:each="item : ${items}">
+            <span class="search-tag-link" th:if="${item.done}" th:text="${item.value}"></span>
+            <button type="submit" name="status" value="${T(ru.students.spring_full.enums.ShopItemStatusEnum).NEW}" class="btn btn-primary col-2" th:text="${item.value}"></button>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+
+</html>

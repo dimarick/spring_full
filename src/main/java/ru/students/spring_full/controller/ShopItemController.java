@@ -12,6 +12,7 @@ import ru.students.spring_full.entity.User;
 import ru.students.spring_full.enums.ShopItemStatusEnum;
 import ru.students.spring_full.repository.ShopItemRepository;
 import ru.students.spring_full.repository.UserRepository;
+import ru.students.spring_full.service.AuditService;
 
 import java.security.Principal;
 import java.time.OffsetDateTime;
@@ -23,10 +24,12 @@ import java.util.Arrays;
 public class ShopItemController {
     private final ShopItemRepository shopItemRepository;
     private final UserRepository userRepository;
+    private final AuditService auditService;
 
-    public ShopItemController(ShopItemRepository shopItemRepository, UserRepository userRepository) {
+    public ShopItemController(ShopItemRepository shopItemRepository, UserRepository userRepository, AuditService auditService) {
         this.shopItemRepository = shopItemRepository;
         this.userRepository = userRepository;
+        this.auditService = auditService;
     }
 
     @GetMapping({"/"})
@@ -49,6 +52,8 @@ public class ShopItemController {
 
         shopItemRepository.saveAllAndFlush(entities);
 
+        auditService.log("addShopItem", values);
+
         return showCurrentState(owner);
     }
 
@@ -64,11 +69,17 @@ public class ShopItemController {
                 item.setStatus(ShopItemStatusEnum.valueOf(status));
                 shopItemRepository.saveAndFlush(item);
             } else {
+                auditService.log("setStatus no access", id, status);
+
                 return showCurrentState(owner, "Доступ запрещен");
             }
         } else {
-            return showCurrentState(owner, "Неверный запрос");
+            auditService.log("setStatus not found", id, status);
+
+            return showCurrentState(owner, "Объект не найден");
         }
+
+        auditService.log("setStatus", id, status);
 
         return showCurrentState(owner);
     }
@@ -82,6 +93,8 @@ public class ShopItemController {
             Arrays.stream(fromStatus.split(",")).map(v -> ShopItemStatusEnum.valueOf(v)).toList(),
             ShopItemStatusEnum.valueOf(toStatus), OffsetDateTime.now()
         );
+
+        auditService.log("setStatus to all", fromStatus, toStatus);
 
         return showCurrentState(owner, "Завершены " + affected + " пунктов");
     }
@@ -98,10 +111,14 @@ public class ShopItemController {
                 item.setDeletedAt(OffsetDateTime.now());
                 shopItemRepository.saveAndFlush(item);
             } else {
+                auditService.log("delete no access", id);
+
                 return showCurrentState(owner, "Доступ запрещен");
             }
         } else {
-            return showCurrentState(owner, "Неверный запрос");
+            auditService.log("setStatus not found", id);
+
+            return showCurrentState(owner, "Объект не найден");
         }
 
         return showCurrentState(owner);

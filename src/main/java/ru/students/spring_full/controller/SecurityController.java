@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.students.spring_full.dto.UserDto;
+import ru.students.spring_full.service.AuditService;
 import ru.students.spring_full.service.UserService;
 
 @Controller
 public class SecurityController {
     private final UserService userService;
+    private final AuditService auditService;
 
-    public SecurityController(UserService userService) {
+    public SecurityController(UserService userService, AuditService auditService) {
         this.userService = userService;
+        this.auditService = auditService;
     }
 
     @GetMapping("/login")
@@ -45,6 +48,8 @@ public class SecurityController {
         }
 
         userService.saveUser(userDto);
+
+        auditService.log("Registered user", userDto);
 
         return "redirect:/register?success";
     }

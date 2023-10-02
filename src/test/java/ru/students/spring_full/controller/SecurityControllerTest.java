@@ -44,7 +44,7 @@ class SecurityControllerTest {
     public void setUp() {
         if (user == null) {
             var roles = List.of(
-                    roleRepository.save(new Role(null, "ROLE_ADMIN", new ArrayList<>()))
+                    roleRepository.save(new Role(null, "ROLE_USER", new ArrayList<>()))
             );
 
             user = new User(null, "user", "user@example.com", "$2a$10$J3sKcZd6fjEeQaxo64bqjOzsySnSY9ZzDkyNeZM5c1z9czvtkFBXK", roles);
@@ -56,7 +56,12 @@ class SecurityControllerTest {
     void home() throws Exception {
         mvc.perform(get("/"))
             .andExpectAll(
-                content().string(StringContains.containsString("List Students")),
+                redirectedUrl("http://localhost/login"),
+                status().is(302)
+            );
+        mvc.perform(get("/").with(user("user@example.com").roles("USER")))
+            .andExpectAll(
+                content().string(StringContains.containsString("Не забыть купить")),
                 status().is(200)
             );
     }
@@ -65,7 +70,7 @@ class SecurityControllerTest {
     void login() throws Exception {
         mvc.perform(get("/login"))
                 .andExpectAll(
-                        content().string(StringContains.containsString("Submit")),
+                        content().string(StringContains.containsString("Вход")),
                         status().is(200)
                 );
         mvc.perform(
@@ -147,7 +152,7 @@ class SecurityControllerTest {
                 status().is(302)
             );
 
-        mvc.perform(get("/users").with(user("user@example.com").roles("ADMIN")))
+        mvc.perform(get("/users").with(user("user@example.com").roles("USER")))
             .andExpectAll(
                 content().string(StringContains.containsString("List of Registered Users")),
                 content().string(StringContains.containsString("user@example.com")),

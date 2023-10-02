@@ -1,5 +1,6 @@
 package ru.students.spring_full.repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,6 @@ public interface ShopItemRepository extends JpaRepository<ShopItem, Long> {
 
     @Query("update ShopItem i set i.status = :toStatus, i.updatedAt = :now where i.owner = :owner and i.status in (:fromStatus) and i.deletedAt is null")
     @Modifying
+    @Transactional
     int setStatusAll(User owner, Collection<ShopItemStatusEnum> fromStatus, ShopItemStatusEnum toStatus, OffsetDateTime now);
 }

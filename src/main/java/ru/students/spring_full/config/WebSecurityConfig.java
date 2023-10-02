@@ -26,7 +26,7 @@ public class WebSecurityConfig {
                         .anyRequest().hasRole("USER")
                 ).formLogin(form -> form.loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/users")
+                        .defaultSuccessUrl("/")
                         .permitAll()
                 ).logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
@@ -34,10 +34,5 @@ public class WebSecurityConfig {
                 );
 
         return http.build();
-
-
-
-
-
     }
 }

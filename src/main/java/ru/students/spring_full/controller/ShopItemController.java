@@ -16,7 +16,7 @@ import ru.students.spring_full.repository.UserRepository;
 import java.security.Principal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 @Slf4j
 @Controller
@@ -29,7 +29,7 @@ public class ShopItemController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping({"/show", "/"})
+    @GetMapping({"/"})
     public ModelAndView show(Principal principal) {
         User owner = getOwner(principal);
 
@@ -38,12 +38,12 @@ public class ShopItemController {
 
     @PostMapping("/add-shop-items")
     public ModelAndView addShopItem(@RequestParam String value, Principal principal) {
-        var items = value.split("\s*[.,]\s*");
+        var values = Arrays.stream(value.split("[.,]")).map(s -> s.trim()).toList();
         User owner = getOwner(principal);
 
         var entities = new ArrayList<ShopItem>();
 
-        for (var item : items) {
+        for (var item : values) {
             entities.add(new ShopItem(null, item, ShopItemStatusEnum.NEW, owner, OffsetDateTime.now(), OffsetDateTime.now(), null));
         }
 
@@ -53,15 +53,15 @@ public class ShopItemController {
     }
 
     @PostMapping("/set-status/{id}")
-    public ModelAndView setStatus(@PathVariable Long id, @RequestParam ShopItemStatusEnum status, Principal principal) {
+    public ModelAndView setStatus(@PathVariable Long id, @RequestParam String status, Principal principal) {
         User owner = getOwner(principal);
         var optionalItem = shopItemRepository.findById(id);
 
         if (optionalItem.isPresent()) {
             var item = optionalItem.get();
 
-            if (item.getOwner().getId() == owner.getId()) {
-                item.setStatus(status);
+            if (item.getOwner().getId().equals(owner.getId())) {
+                item.setStatus(ShopItemStatusEnum.valueOf(status));
                 shopItemRepository.saveAndFlush(item);
             } else {
                 return showCurrentState(owner, "Доступ запрещен");
@@ -74,10 +74,14 @@ public class ShopItemController {
     }
 
     @PostMapping("/set-status")
-    public ModelAndView setStatus(@RequestParam ShopItemStatusEnum fromStatus, @RequestParam ShopItemStatusEnum toStatus, Principal principal) {
+    public ModelAndView setStatus(@RequestParam String fromStatus, @RequestParam String toStatus, Principal principal) {
         User owner = getOwner(principal);
 
-        int affected = shopItemRepository.setStatusAll(owner, List.of(fromStatus), toStatus, OffsetDateTime.now());
+        int affected = shopItemRepository.setStatusAll(
+            owner,
+            Arrays.stream(fromStatus.split(",")).map(v -> ShopItemStatusEnum.valueOf(v)).toList(),
+            ShopItemStatusEnum.valueOf(toStatus), OffsetDateTime.now()
+        );
 
         return showCurrentState(owner, "Завершены " + affected + " пунктов");
     }
@@ -90,7 +94,7 @@ public class ShopItemController {
         if (optionalItem.isPresent()) {
             var item = optionalItem.get();
 
-            if (item.getOwner().getId() == owner.getId()) {
+            if (item.getOwner().getId().equals(owner.getId())) {
                 item.setDeletedAt(OffsetDateTime.now());
                 shopItemRepository.saveAndFlush(item);
             } else {

@@ -79,7 +79,7 @@ class SecurityControllerTest {
                     .content("username=user%40example.com&password=123")
             )
             .andExpectAll(
-                redirectedUrl("/users"),
+                redirectedUrl("/"),
                 status().is(302)
             );
 
